@@ -1,33 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet">
-  <script src="https://vjs.zencdn.net/8.3.0/video.js"></script>
-  <title>Video Player</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honey-Rose Stream</title>
+    <link href="https://vjs.zencdn.net/7.15.0/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.15.0/video.js"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000; /* Amoled black */
+            color: #fff; /* White text for better visibility on black */
+            font-family: Arial, sans-serif; /* Optional: Set a font for better text rendering */
+        }
+
+        #video-container {
+            position: relative;
+            width: 100%; /* Full width */
+        }
+
+        #url-input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media only screen and (max-width: 600px) {
+            #video-container {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div id="video-container">
+        <video
+            id="video-player"
+            class="video-js vjs-default-skin"
+            controls
+            preload="auto"
+            width="640"
+            height="264"
+            data-setup='{}'
+        >
+            Your browser does not support the video tag.
+        </video>
+        <div id="error-message"></div>
+    </div>
 
-<div style="text-align: center;">
-  <video id="my-video" class="video-js" controls preload="auto" width="640" height="264" data-setup='{}'>
-    <source src="" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const videoPlayer = videojs('video-player');
+            const errorMessage = document.getElementById('error-message');
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoUrl = urlParams.get('url');
+            // Get the video URL from the query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoUrl = urlParams.get('url');
 
-    const player = videojs('my-video');
-    player.src({
-      src: videoUrl,
-      type: 'video/mp4'
-    });
-  });
-</script>
-
+            // Set the video source if a URL is provided
+            if (videoUrl) {
+                videoPlayer.src(decodeURIComponent(videoUrl));
+            } else {
+                errorMessage.innerText = 'Invalid or missing video URL.';
+            }
+        });
+    </script>
 </body>
 </html>
